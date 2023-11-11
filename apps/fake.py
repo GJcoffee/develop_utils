@@ -1,11 +1,13 @@
 """生成假数据并写入数据库"""
+import os
+
 from utils.faker_data import fake_data_generator
 from utils.db_utils import oracle_db
 
 
 def generate_fake_data(num):
     """获取假数据"""
-    return fake_data_generator.generate_fake_data(num)
+    return fake_data_generator.generate_demo_fake_data(num)
 
 
 def init_sql(path=r'C:\Users\19096\Desktop\develop_utils\conf\fjgz_clom.txt'):
@@ -24,7 +26,7 @@ def excute_insert(data):
     :param data:
     :return:
     """
-    sql = init_sql()
+    sql = init_sql(path=r'/conf/demo.txt')
     task_data = tuple(data[0].values())
     insert_data(sql, task_data)
 
@@ -42,12 +44,12 @@ def insert_data(sql, data_tuple):
 
 
 def input_oracle():
-    fake_data = list(map(generate_fake_data, list(range(1, 50000))))
+    fake_data = list(map(generate_fake_data, list(range(1, 50001))))
     list(map(excute_insert, fake_data))
 
 
 if __name__ == '__main__':
-    input_oracle()
+    # input_oracle()
     # for _ in range(5):
     #     thread = threading.Thread(target=input_oracle)
     #     # thread2 = threading.Thread(target=input_oracle)
@@ -59,3 +61,4 @@ if __name__ == '__main__':
     # thread3.start()
     # thread4.start()
     # thread5.start()
+    os.getcwd()

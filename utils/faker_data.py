@@ -7,6 +7,7 @@ fake = Faker(locale='zh_CN')
 
 
 class FakeDataGenerator:
+
     def get_fake_data_list(self):
         """获取飞机故障假数据"""
         data = [
@@ -84,6 +85,20 @@ class FakeDataGenerator:
         ]
         return data
 
+    def get_demo_fake_data(self):
+        data = [
+            ("mingchengid", fake.random_int(min=1, max=100)),
+            ("lingyu", fake.word()[:255]),
+            ("zhuti", fake.word()[:255]),
+            ("mulu", fake.word()[:255]),
+            ("mingcheng", fake.word()[:255]),
+            ("fujian", fake.text()[:255]),
+            ("zhaiyao", fake.text()[:255]),
+            ("guanjianci", fake.word()[:255]),
+            ("neirong", fake.text()[:255])
+        ]
+        return data
+
     def generate_fake_data(self, index=1):
         """
         根据index生成id，修改带传入数据库日期格式
@@ -98,23 +113,24 @@ class FakeDataGenerator:
         record['发生日期'] = f"""TO_DATE('{record["发生日期"]}', 'YYYY-MM-DD')"""
         record['实际完成时间'] = f"""TO_DATE('{record["实际完成时间"]}', 'YYYY-MM-DD')"""
         data.append(record)
-        if index%100 ==0:
+        if index % 100 == 0:
+            print(f"正在生成第{index}条数据")
+        return data
+
+    def generate_demo_fake_data(self, index=1):
+        """
+        根据index生成id，修改带传入数据库日期格式
+        :param index:
+        :return:
+        """
+        data = []
+        fake_data_list = self.get_demo_fake_data()
+        record = OrderedDict(fake_data_list)
+        record['mingchengid'] = index
+        data.append(record)
+        if index % 100 == 0:
             print(f"正在生成第{index}条数据")
         return data
 
 
-def input_oracle():
-    oracle = OracleHandler(con_config)
-    oracle.get_conn()
-    fake_data_generator = FakeDataGenerator()
-    fake_data = fake_data_generator.generate_fake_data(fake_data_list, num_records=1)
-    for data in fake_data:
-        task_data =tuple(data.values())
-        oracle.execute_insert_many_sql(fjgz_sql, task_data)
-
-
 fake_data_generator = FakeDataGenerator()
-if __name__ == '__main__':
-    # 生成假数据
-    # fake_data = fake_data_generator.generate_fake_data(fake_data_list, num_records=1)
-    input_oracle()
