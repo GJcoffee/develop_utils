@@ -18,19 +18,20 @@ class OracleDb:
         self.Port = db_config.get('PORT')
         self.Password = db_config.get('PASSWORD')
         self.User = db_config.get('USERNAME')
-        self.Servername = db_config.get('SERVER_NAME')
+        self.Servername = db_config.get('SERVICE_NAME')
         self.Sid = db_config.get('SID')
 
         if self.Servername:
-            self.uri = '{}/{}@{}:{}/{}'.format(self.User, self.Password, self.Host, self.Password, self.Servername)
+            self.uri = '{}/{}@{}:{}/{}'.format(self.User, self.Password, self.Host, self.Port, self.Servername)
         elif self.Sid:
-            self.uri = '{}/{}@{}:{}/{}'.format(self.User, self.Password, self.Host, self.Password, self.Sid)
+            self.uri = '{}/{}@{}:{}/{}'.format(self.User, self.Password, self.Host, self.Port, self.Sid)
         else:
             assert self.Servername or self.Sid
         self._connection()
 
     def __del__(self):
-        self.cursor.close()
+        if self.cursor:
+            self.cursor.close()
         self.connection.commit()
         self.connection.close()
 
@@ -43,9 +44,9 @@ class OracleDb:
 
     def insert_data(self, sql):
         self.get_cursor()
-        print('=' * 50)
-        self.cursor.excute(sql)
-        print("执行sql语句成功", sql)
+        # print('=' * 50)
+        self.cursor.execute(sql)
+        # print("执行sql语句成功", sql)
         self.connection.commit()
 
 

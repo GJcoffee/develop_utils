@@ -1,7 +1,6 @@
 from faker import Faker
 from collections import OrderedDict
-from db_utils import OracleHandler
-from conf.setting import con_config, fjgz_sql, fjgz_clom
+from conf.setting import con_config
 
 fake = Faker(locale='zh_CN')
 
@@ -88,14 +87,14 @@ class FakeDataGenerator:
     def get_demo_fake_data(self):
         data = [
             ("mingchengid", fake.random_int(min=1, max=100)),
-            ("lingyu", fake.word()[:255]),
-            ("zhuti", fake.word()[:255]),
+            ("lingyu", fake.random_element(["科技", "医学", "文学", "艺术"])),
+            ("zhuti", fake.sentence()[:255]),
             ("mulu", fake.word()[:255]),
-            ("mingcheng", fake.word()[:255]),
+            ("mingcheng", fake.catch_phrase()[:255]),
             ("fujian", fake.text()[:255]),
-            ("zhaiyao", fake.text()[:255]),
+            ("zhaiyao", fake.sentence()[:255]),
             ("guanjianci", fake.word()[:255]),
-            ("neirong", fake.text()[:255])
+            ("neirong", fake.paragraph()[:255])
         ]
         return data
 
