@@ -44,3 +44,14 @@ class RemoteControl:
 
 if __name__ == '__main__':
     light = Light()
+
+    light_on = LightOnCommand(light)
+    light_off = LightOffCommand(light)
+
+    control = RemoteControl()
+
+    control.set_command(light_on)
+    control.execute_command()
+
+    control.set_command(light_off)
+    control.execute_command()
